@@ -1,3 +1,5 @@
+//Laurins Test, ob Git funktioniert
+
 let ctx   = canvas.getContext("2d");
 var cells = [[1,0],[0,1],[1,2],[3,1]];
 //var cells = [];
