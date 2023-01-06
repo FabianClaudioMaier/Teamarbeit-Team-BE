@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -30,6 +32,28 @@ public class GameOfLife extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(GameOfLife.class.getResource("Style.fxml"));
         Scene scene = new Scene(root, WIDTH, HEIGHT);
         Scene menu = new Scene(fxmlLoader.load(), 300,200);
+
+        //Save Button
+        /*um ein Muster in das Archiv zu speichern; hinfällig? siehe Technische Recherche 3 in Trello
+        Button saveSimulationButton = new Button("Save");
+        saveSimulationButton.setLayoutX(200);
+        saveSimulationButton.setLayoutY(HEIGHT + 10);
+         */
+
+        // Edit Button
+        // um ein Muster aus dem Archiv zu laden
+        Button editSimulationButton = new Button("Edit");
+        editSimulationButton.setLayoutX(200);
+        editSimulationButton.setLayoutY(HEIGHT + 10);
+
+        // Button Radierer/Stift
+        /* Modus Stift/Draw: Alle Zellen die geklickt werden, werden Lebendig oder bleiben es
+        Modus Radierer/Erase: Alle Zellen die geklickt werden, werden Tot oder bleiben es.
+         */
+        ToggleButton drawEraseButton = new ToggleButton("Draw/Erase");
+        drawEraseButton.setLayoutX(200);
+        drawEraseButton.setLayoutY(HEIGHT + 10);
+
 
         initializeCurrentGeneration();
 
