@@ -2,6 +2,8 @@ Array.java
  Array
 main.java
  main
+Models/Coordinates.java
+ Models.Coordinates
 ArrayGameHandler.java
  ArrayGameHandler
  ArrayGameHandler$1

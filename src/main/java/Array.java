@@ -1,4 +1,16 @@
 public class Array {
+    public void switchLifeDeathStatus(int x, int y)
+    {
+        if (Array[x][y] == 1)
+        {
+            Array[x][y] = 0;
+        }
+        else if (Array[x][y] == 0)
+        {
+            Array[x][y] = 1;
+        }
+    }
+
     private int[][] Array; //1 = LIFE, 0 = DEAD
     int numberOfColoums, numberOfRows;
 
