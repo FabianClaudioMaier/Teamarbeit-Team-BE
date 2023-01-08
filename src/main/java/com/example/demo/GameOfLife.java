@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +14,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameOfLife extends Application {
     private static final int WIDTH = 800;
@@ -20,69 +23,100 @@ public class GameOfLife extends Application {
     private static final int ROWS = 60;
     private static final int COLUMNS = 80;
     private static final int CELL_SIZE = 10;
+    private boolean gameStatePlay = false;
 
-    private boolean[][] currentGeneration = new boolean[ROWS][COLUMNS];
-    private boolean[][] nextGeneration = new boolean[ROWS][COLUMNS];
+    private boolean editState = false;
+    private Group root = new Group();
+    private Scene scene = new Scene(root, WIDTH + 100, HEIGHT + 100);
+    private static Array array = new Array(ROWS,COLUMNS);
+    private final Timer timer = new Timer();
+
+    private final TimerTask ttUpdateArray = new TimerTask() {
+        @Override
+        public void run() {
+            array.update();
+            //updateCellApparell();
+            System.out.println(array);
+        }
+    };
 
     public static void main(String[] args) {
+        array.create(0.5);
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Group root = new Group();
+
         FXMLLoader fxmlLoader = new FXMLLoader(GameOfLife.class.getResource("Style.fxml"));
-        Scene scene = new Scene(root, WIDTH + 100, HEIGHT + 100);
+
         Scene menu = new Scene(fxmlLoader.load(), 300,200);
 
-        Button nextStep = new Button("next Step");
-        nextStep.setLayoutX(100);
-        nextStep.setLayoutY(HEIGHT + 10);
 
-        /*ToggleButton RunStop = new ToggleButton("Run");
-        RunStop.setLayoutX(200);
-        RunStop.setLayoutY(HEIGHT + 10);*/
+
+        Button nextStep = new Button("next Step");
+        nextStep.setLayoutX(WIDTH + 10);
+        nextStep.setLayoutY(100);
 
         nextStep.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-                updateGeneration();
+                //updateGeneration();
+                array.update();
                 for (int row = 0; row < ROWS; row++) {
                     for (int col = 0; col < COLUMNS; col++) {
-                        ((Rectangle) root.getChildren().get(row * COLUMNS + col)).setFill(currentGeneration[row][col] ? Color.BLACK : Color.WHITE);
+                        ((Rectangle) root.getChildren().get(row * COLUMNS + col)).setFill(array.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
                     }
                 }
             }
         });
 
-       /* RunStop.setOnAction(new EventHandler<ActionEvent>() {
+        ToggleButton StartStop = new ToggleButton("Start");
+        StartStop.setLayoutX(WIDTH + 10);
+        StartStop.setLayoutY(200);
+
+        StartStop.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-                if(RunStop.)
-                updateGeneration();
-                for (int row = 0; row < ROWS; row++) {
-                    for (int col = 0; col < COLUMNS; col++) {
-                        ((Rectangle) root.getChildren().get(row * COLUMNS + col)).setFill(currentGeneration[row][col] ? Color.BLACK : Color.WHITE);
-                    }
+                if (gameStatePlay){
+                    timer.cancel();
+                    StartStop.setText("Start");
                 }
+                else {
+                    timer.scheduleAtFixedRate(ttUpdateArray, 0, 500);
+                    StartStop.setText("Stop");
+                }
+                gameStatePlay = !gameStatePlay;
             }
-        });*/
+        });
 
+        Button Edit = new Button("Edit");
+        Edit.setLayoutX(WIDTH + 10);
+        Edit.setLayoutY(300);
 
+        Edit.setOnAction(new EventHandler<ActionEvent>() {
 
-        initializeCurrentGeneration();
+            @Override
+            public void handle(ActionEvent event) {
+                gameStatePlay = false;
+                editState = !editState;
+                timer.cancel();
+                StartStop.setText("Start");
 
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                Rectangle cell = new Rectangle(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-                cell.setFill(currentGeneration[row][col] ? Color.BLACK : Color.WHITE);
-                root.getChildren().add(cell);
             }
-        }
+        });
+
+
+        //initializeCurrentGeneration();
+        //array.create(0.5);
+
+        updateCellApparell();
 
         root.getChildren().add(nextStep);
+        root.getChildren().add(StartStop);
+        root.getChildren().add(Edit);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -90,13 +124,18 @@ public class GameOfLife extends Application {
         //primaryStage.show();
 
         scene.setOnMouseClicked(event -> {
-            int row = (int) (event.getY() / CELL_SIZE);
-            int col = (int) (event.getX() / CELL_SIZE);
-            currentGeneration[row][col] = !currentGeneration[row][col];
-            ((Rectangle) root.getChildren().get(row * COLUMNS + col)).setFill(currentGeneration[row][col] ? Color.BLACK : Color.WHITE);
+            if(!gameStatePlay) {
+                int row = (int) (event.getY() / CELL_SIZE);
+                int col = (int) (event.getX() / CELL_SIZE);
+                //currentGeneration[row][col] = !currentGeneration[row][col];
+                array.setArray(row, col);
+                ((Rectangle) root.getChildren().get(row * COLUMNS + col)).setFill(array.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+            } else {
+                System.out.println("please Stop the Game to change states");
+            }
         });
 
-        scene.setOnKeyPressed(event -> {
+        /*scene.setOnKeyPressed(event -> {
             if (event.getCode().getName().equals("Space")) {
                 updateGeneration();
                 for (int row = 0; row < ROWS; row++) {
@@ -105,18 +144,28 @@ public class GameOfLife extends Application {
                     }
                 }
             }
-        });
+        });*/
     }
 
     private void initializeCurrentGeneration() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
-                currentGeneration[row][col] = Math.random() < 0.5;
+                //currentGeneration[row][col] = Math.random() < 0.5;
             }
         }
     }
 
-    private void updateGeneration() {
+    private void updateCellApparell(){
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                Rectangle cell = new Rectangle(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                cell.setFill(array.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                root.getChildren().add(cell);
+            }
+        }
+    }
+
+    /*private void updateGeneration() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 nextGeneration[row][col] = shouldLive(row, col);
@@ -145,5 +194,5 @@ public class GameOfLife extends Application {
             }
         }
         return count;
-    }
+    }*/
 }
