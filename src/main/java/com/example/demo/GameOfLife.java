@@ -30,7 +30,7 @@ public class GameOfLife extends Application {
     public void start(Stage primaryStage) throws IOException {
         Group root = new Group();
         FXMLLoader fxmlLoader = new FXMLLoader(GameOfLife.class.getResource("Style.fxml"));
-        Scene scene = new Scene(root, WIDTH, HEIGHT);
+        Scene scene = new Scene(root, WIDTH + 100, HEIGHT + 100);
         Scene menu = new Scene(fxmlLoader.load(), 300,200);
 
         //Save Button
@@ -65,10 +65,13 @@ public class GameOfLife extends Application {
             }
         }
 
+        root.getChildren().add(editSimulationButton);
+        //root.getChildren().add()
+
         primaryStage.setScene(scene);
         primaryStage.show();
-        primaryStage.setScene(menu);
-        primaryStage.show();
+       // primaryStage.setScene(menu);
+       // primaryStage.show();
 
         scene.setOnMouseClicked(event -> {
             int row = (int) (event.getY() / CELL_SIZE);
