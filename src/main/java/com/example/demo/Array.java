@@ -83,4 +83,13 @@ public class Array {
         output += "\n";
         return output;
     }
+
+    public int[][] getArray(){
+        return Array;
+    }
+
+    public void setArray(int row, int col){
+        if(Array[row][col] == 1) Array[row][col] = 0;
+        else Array[row][col] = 1;
+    }
 }
