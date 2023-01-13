@@ -14,7 +14,7 @@ With each iteration it changes it status according to a simple set of rules. (so
  * If the cell is dead, then it springs to life only in the case that it has 3 live neighbors
 
 ## The Project should include the following functions:
- * load and save configurations ( )
+ * load and save configurations (x)
  * simulation speed configurable ( )
  * manuell steps (x)
  * Pause / Next Step / Play (x)
