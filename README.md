@@ -22,4 +22,11 @@ With each iteration it changes it status according to a simple set of rules. (so
  * world size configurable ( )
  * Think about possible extensions you could implement (5 member group)
  
-
+## How to play
+ * start the application by running the GameOfLife.main() method
+ * U can now see a screen with white and black Cells and a number of Buttons
+ * Run lets the simulation progress every 10 seconds
+ * Stop halts it
+ * Press Start Editing to beginn changeing the state of the boxes
+ * Save puts the current setting into a List
+ * Go to to Archive retrieves the last list object that was saved

@@ -33,12 +33,6 @@ public class GameOfLife extends Application {
     private static int timeStamp = 0;
     private static List<Array> saved = new ArrayList<>();
 
-    /*private final TimerTask ttUpdateArray = new TimerTask() {
-        @Override
-        public void run() {
-            array.update();
-        }
-    };*/
 
     public static void main(String[] args) {
         array.create(0.5);
