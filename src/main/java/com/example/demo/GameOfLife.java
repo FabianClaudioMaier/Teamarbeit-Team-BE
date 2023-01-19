@@ -53,7 +53,8 @@ public class GameOfLife extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                ARRAY.update();
+                //ARRAY.update();
+                arrayGameHandler.nextStep();
                 for (int row = 0; row < ROWS; row++) {
                     for (int col = 0; col < COLUMNS; col++) {
                         ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
@@ -153,7 +154,7 @@ public class GameOfLife extends Application {
             @Override
             public void handle(long now) {
                 if(RUNNING && timeStamp%simulationSpeed == 0){
-                    ARRAY.update();
+                    arrayGameHandler.nextStep();
                     timeStamp = 0;
                 }
 

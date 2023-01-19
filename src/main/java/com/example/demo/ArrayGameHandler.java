@@ -37,12 +37,10 @@ public class ArrayGameHandler {
 
     public void nextStep() {
         array.update();
-        System.out.println(array);
     }
 
     public void changeCellStatus(int row, int col) {
         array.setArray(row, col);
-        System.out.println(array);
     }
 
     public void changeHoverCellsStatus(List<Coordinates> listOfCoordinates) {
