@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.Models.Array;
+import com.example.demo.Models.Coordinates;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -53,7 +55,6 @@ public class GameOfLife extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                //ARRAY.update();
                 arrayGameHandler.nextStep();
                 for (int row = 0; row < ROWS; row++) {
                     for (int col = 0; col < COLUMNS; col++) {
@@ -74,6 +75,7 @@ public class GameOfLife extends Application {
                 else StartStop.setText("Stop");
 
                 RUNNING = !RUNNING;
+                arrayGameHandler.playPause();
             }
         });
 
@@ -138,16 +140,21 @@ public class GameOfLife extends Application {
         primaryStage.setScene(SCENE);
         primaryStage.show();
 
-        SCENE.setOnMouseClicked(event -> {
+        SCENE.setOnMousePressed( circleOnMouseDraggedEventHandler/*event -> {
             if(EDITING) {
+
+                //List<Coordinates> coordinatesList = new ArrayList<>();
                 int row = (int) (event.getY() / CELL_SIZE);
                 int col = (int) (event.getX() / CELL_SIZE);
-                ARRAY.setArray(row, col);
+                //coordinatesList.add(new Coordinates(col,row));
+                //arrayGameHandler.changeHoverCellsStatus(coordinatesList);
+                arrayGameHandler.changeCellStatus(row,col);
                 ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+
             } else {
                 System.out.println("please Stop the Game to change states");
             }
-        });
+        }*/);
 
         new AnimationTimer(){
 
@@ -181,4 +188,27 @@ public class GameOfLife extends Application {
             }
         }
     }
+
+    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
+            new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent event) {
+                    if(EDITING) {
+                        List<Coordinates> coordinatesList = new ArrayList<>();
+                        SCENE.setOnMouseMoved(event1 -> {
+                            int row = (int) (event.getY() / CELL_SIZE);
+                            int col = (int) (event.getX() / CELL_SIZE);
+                            coordinatesList.add(new Coordinates(col,row));
+                            ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                        });
+
+                        arrayGameHandler.changeHoverCellsStatus(coordinatesList);
+                        //arrayGameHandler.changeCellStatus(row,col);
+
+                    } else {
+                        System.out.println("please Stop the Game to change states");
+                    }
+                }
+            };
 }
