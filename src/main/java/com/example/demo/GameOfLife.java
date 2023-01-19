@@ -142,6 +142,7 @@ public class GameOfLife extends Application {
                 System.out.println("please Stop the Game to change states");
             }
         });
+
         new AnimationTimer(){
 
             @Override
@@ -158,10 +159,12 @@ public class GameOfLife extends Application {
     }
 
     private void updateCellApparell(){
+
         List<Object> cells = Collections.singletonList(ROOT.getChildren());
         for (Object cell: cells) {
             ROOT.getChildren().remove(cell);
         }
+        ROOT.getChildren().removeAll(cells);
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
