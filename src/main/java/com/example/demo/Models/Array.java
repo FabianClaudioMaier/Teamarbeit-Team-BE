@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Models;
 
 public class Array {
     private int[][] Array; //1 = LIFE, 0 = DEAD

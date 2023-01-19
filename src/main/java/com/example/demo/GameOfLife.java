@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.Models.Array;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,7 +30,11 @@ public class GameOfLife extends Application {
     private static Timer TIMER = new Timer();
 
     private static int timeStamp = 0;
+
+    private static int simulationSpeed = 20;
     private static List<Array> SAVED = new ArrayList<>();
+
+    private static ArrayGameHandler arrayGameHandler = new ArrayGameHandler(ARRAY);
 
 
     public static void main(String[] args) {
@@ -121,7 +126,7 @@ public class GameOfLife extends Application {
             }
         });
 
-        updateCellApparell();
+        createCells();
 
         ROOT.getChildren().add(nextStep);
         ROOT.getChildren().add(StartStop);
@@ -147,7 +152,7 @@ public class GameOfLife extends Application {
 
             @Override
             public void handle(long now) {
-                if(RUNNING && timeStamp%5 == 0){
+                if(RUNNING && timeStamp%simulationSpeed == 0){
                     ARRAY.update();
                     timeStamp = 0;
                 }
@@ -159,13 +164,14 @@ public class GameOfLife extends Application {
     }
 
     private void updateCellApparell(){
-
-        List<Object> cells = Collections.singletonList(ROOT.getChildren());
-        for (Object cell: cells) {
-            ROOT.getChildren().remove(cell);
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+            }
         }
-        ROOT.getChildren().removeAll(cells);
+    }
 
+    private void createCells(){
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 Rectangle cell = new Rectangle(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
