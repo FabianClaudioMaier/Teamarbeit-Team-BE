@@ -1,11 +1,9 @@
 package com.example.demo;
 
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.animation.AnimationTimer;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,19 +21,19 @@ public class GameOfLife extends Application {
     private static final int ROWS = 15;
     private static final int COLUMNS = 20;
     private static final int CELL_SIZE = 40;
-    private boolean gameStatePlay = false;
-    private boolean editState = false;
-    private Group root = new Group();
-    private Scene scene = new Scene(root, WIDTH + 100, HEIGHT + 100);
-    private static Array array = new Array(ROWS,COLUMNS);
-    private static Timer timer = new Timer();
+    private boolean RUNNING = false;
+    private boolean EDITING = false;
+    private Group ROOT = new Group();
+    private Scene SCENE = new Scene(ROOT, WIDTH + 100, HEIGHT + 100);
+    private static Array ARRAY = new Array(ROWS,COLUMNS);
+    private static Timer TIMER = new Timer();
 
     private static int timeStamp = 0;
-    private static List<Array> saved = new ArrayList<>();
+    private static List<Array> SAVED = new ArrayList<>();
 
 
     public static void main(String[] args) {
-        array.create(0.5);
+        ARRAY.create(0.5);
         launch(args);
     }
 
@@ -50,10 +48,10 @@ public class GameOfLife extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                array.update();
+                ARRAY.update();
                 for (int row = 0; row < ROWS; row++) {
                     for (int col = 0; col < COLUMNS; col++) {
-                        ((Rectangle) root.getChildren().get(row * COLUMNS + col)).setFill(array.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                        ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
                     }
                 }
             }
@@ -66,10 +64,10 @@ public class GameOfLife extends Application {
         StartStop.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (gameStatePlay) StartStop.setText("Start");
+                if (RUNNING) StartStop.setText("Start");
                 else StartStop.setText("Stop");
 
-                gameStatePlay = !gameStatePlay;
+                RUNNING = !RUNNING;
             }
         });
 
@@ -80,16 +78,16 @@ public class GameOfLife extends Application {
         Edit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(!editState){
-                    gameStatePlay = false;
-                    timer.cancel();
+                if(!EDITING){
+                    RUNNING = false;
+                    TIMER.cancel();
                     StartStop.setText("Start");
                     Edit.setText("Stop Editing");
                 }
-                if(editState){
+                if(EDITING){
                     Edit.setText("Start Editing");
                 }
-                editState = !editState;
+                EDITING = !EDITING;
             }
         });
 
@@ -101,9 +99,9 @@ public class GameOfLife extends Application {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Save Button clicked");
-                if(editState){
+                if(EDITING){
                     System.out.println("Saved");
-                    saved.add(array);
+                    SAVED.add(ARRAY);
                 } else {
                     System.out.println("you have to be in edit mode to save");
                 }
@@ -118,28 +116,28 @@ public class GameOfLife extends Application {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("pressed go to Archive");
-                array = saved.get(0);
+                ARRAY = SAVED.get(0);
                 updateCellApparell();
             }
         });
 
         updateCellApparell();
 
-        root.getChildren().add(nextStep);
-        root.getChildren().add(StartStop);
-        root.getChildren().add(Edit);
-        root.getChildren().add(Save);
-        root.getChildren().add(GoToArchive);
+        ROOT.getChildren().add(nextStep);
+        ROOT.getChildren().add(StartStop);
+        ROOT.getChildren().add(Edit);
+        ROOT.getChildren().add(Save);
+        ROOT.getChildren().add(GoToArchive);
 
-        primaryStage.setScene(scene);
+        primaryStage.setScene(SCENE);
         primaryStage.show();
 
-        scene.setOnMouseClicked(event -> {
-            if(editState) {
+        SCENE.setOnMouseClicked(event -> {
+            if(EDITING) {
                 int row = (int) (event.getY() / CELL_SIZE);
                 int col = (int) (event.getX() / CELL_SIZE);
-                array.setArray(row, col);
-                ((Rectangle) root.getChildren().get(row * COLUMNS + col)).setFill(array.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                ARRAY.setArray(row, col);
+                ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
             } else {
                 System.out.println("please Stop the Game to change states");
             }
@@ -148,8 +146,8 @@ public class GameOfLife extends Application {
 
             @Override
             public void handle(long now) {
-                if(gameStatePlay && timeStamp%5 == 0){
-                    array.update();
+                if(RUNNING && timeStamp%5 == 0){
+                    ARRAY.update();
                     timeStamp = 0;
                 }
 
@@ -160,16 +158,16 @@ public class GameOfLife extends Application {
     }
 
     private void updateCellApparell(){
-        List<Object> cells = Collections.singletonList(root.getChildren());
+        List<Object> cells = Collections.singletonList(ROOT.getChildren());
         for (Object cell: cells) {
-            root.getChildren().remove(cell);
+            ROOT.getChildren().remove(cell);
         }
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 Rectangle cell = new Rectangle(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-                cell.setFill(array.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
-                root.getChildren().add(cell);
+                cell.setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                ROOT.getChildren().add(cell);
             }
         }
     }
