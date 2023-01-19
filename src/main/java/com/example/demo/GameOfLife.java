@@ -19,9 +19,9 @@ import java.util.*;
 public class GameOfLife extends Application {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
-    private static final int ROWS = 150;
-    private static final int COLUMNS = 100;
-    private static final int CELL_SIZE = 2;
+    private static final int ROWS = 15;
+    private static final int COLUMNS = 20;
+    private static final int CELL_SIZE = 40;
     private boolean RUNNING = false;
     private boolean EDITING = false;
     private Group ROOT = new Group();
