@@ -39,4 +39,4 @@ bin/
 .DS_Store
 
 ### Saved configurations in the Archive directory ###
-!**/src/main/Archive/**.csv
+/src/main/Archive/*
