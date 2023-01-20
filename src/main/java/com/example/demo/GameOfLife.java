@@ -34,7 +34,7 @@ public class GameOfLife extends Application {
     private static int simulationSpeed = 20;
     private static List<Array> SAVED = new ArrayList<>();
 
-    private static ArrayGameHandler arrayGameHandler = new ArrayGameHandler(ARRAY);
+    private static GameArrayHandler gameArrayHandler = new GameArrayHandler(ARRAY);
 
 
     public static void main(String[] args) {
@@ -106,7 +106,7 @@ public class GameOfLife extends Application {
                 System.out.println("Save Button clicked");
                 if(EDITING){
                     System.out.println("Saved");
-                    SAVED.add(ARRAY);
+                   ArchiveDAL.save(ARRAY);
                 } else {
                     System.out.println("you have to be in edit mode to save");
                 }
@@ -141,7 +141,7 @@ public class GameOfLife extends Application {
             if(EDITING) {
                 int row = (int) (event.getY() / CELL_SIZE);
                 int col = (int) (event.getX() / CELL_SIZE);
-                ARRAY.setArray(row, col);
+                ARRAY.changeCellStatus(row, col);
                 ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
             } else {
                 System.out.println("please Stop the Game to change states");

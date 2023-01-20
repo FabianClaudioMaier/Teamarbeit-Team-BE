@@ -88,8 +88,20 @@ public class Array {
         return Array;
     }
 
-    public void setArray(int row, int col){
+    public void changeCellStatus(int row, int col){
         if(Array[row][col] == 1) Array[row][col] = 0;
         else Array[row][col] = 1;
+    }
+
+    public void setCellStatus(int row, int col, int value){
+        Array[row][col] = value;
+    }
+
+    public int getNumberOfColoums() {
+        return numberOfColoums;
+    }
+
+    public int getNumberOfRows() {
+        return numberOfRows;
     }
 }
