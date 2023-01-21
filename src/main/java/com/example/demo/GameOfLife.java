@@ -170,6 +170,7 @@ public class GameOfLife extends Application {
                 node.setFocusTraversable(false);
             }
         }
+        ROOT.requestFocus();
 
         ROOT.addEventHandler(KeyEvent.KEY_PRESSED, event -> { // Event handler for key presses, to control game with keyboard
             if (event.getCode() == KeyCode.E) {
