@@ -6,9 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -26,7 +29,7 @@ public class GameOfLife extends Application {
     private boolean EDITING = false;
     private Group ROOT = new Group();
     private Scene SCENE = new Scene(ROOT, WIDTH + 100, HEIGHT + 100);
-    private static Array ARRAY = new Array(ROWS,COLUMNS);
+    private static Array ARRAY = new Array(ROWS, COLUMNS);
     private static Timer TIMER = new Timer();
 
     private static int timeStamp = 0;
@@ -83,13 +86,13 @@ public class GameOfLife extends Application {
         Edit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(!EDITING){
+                if (!EDITING) {
                     RUNNING = false;
                     TIMER.cancel();
                     StartStop.setText("Start");
                     Edit.setText("Stop Editing");
                 }
-                if(EDITING){
+                if (EDITING) {
                     Edit.setText("Start Editing");
                 }
                 EDITING = !EDITING;
@@ -104,9 +107,9 @@ public class GameOfLife extends Application {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Save Button clicked");
-                if(EDITING){
+                if (EDITING) {
                     System.out.println("Saved");
-                   ArchiveDAL.save(ARRAY);
+                    ArchiveDAL.save(ARRAY);
                 } else {
                     System.out.println("you have to be in edit mode to save");
                 }
@@ -138,7 +141,7 @@ public class GameOfLife extends Application {
         primaryStage.show();
 
         SCENE.setOnMouseClicked(event -> {
-            if(EDITING) {
+            if (EDITING) {
                 int row = (int) (event.getY() / CELL_SIZE);
                 int col = (int) (event.getX() / CELL_SIZE);
                 ARRAY.changeCellStatus(row, col);
@@ -148,11 +151,11 @@ public class GameOfLife extends Application {
             }
         });
 
-        new AnimationTimer(){
+        new AnimationTimer() {
 
             @Override
             public void handle(long now) {
-                if(RUNNING && timeStamp%simulationSpeed == 0){
+                if (RUNNING && timeStamp % simulationSpeed == 0) {
                     ARRAY.update();
                     timeStamp = 0;
                 }
@@ -161,9 +164,31 @@ public class GameOfLife extends Application {
                 updateCellApparell();
             }
         }.start();
+
+        for (Node node : ROOT.getChildren()) {
+            if (node instanceof Button || node instanceof ToggleButton) {
+                node.setFocusTraversable(false);
+            }
+        }
+
+        ROOT.addEventHandler(KeyEvent.KEY_PRESSED, event -> { // Event handler for key presses, to control game with keyboard
+            if (event.getCode() == KeyCode.E) {
+                Edit.fire();
+            }
+            if (event.getCode() == KeyCode.S) {
+                Save.fire();
+            }
+            if (event.getCode() == KeyCode.N) {
+                nextStep.fire();
+            }
+            if (event.getCode() == KeyCode.SPACE) {
+                StartStop.fire();
+            }
+            event.consume();
+        });
     }
 
-    private void updateCellApparell(){
+    private void updateCellApparell() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
@@ -171,7 +196,7 @@ public class GameOfLife extends Application {
         }
     }
 
-    private void createCells(){
+    private void createCells() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 Rectangle cell = new Rectangle(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
