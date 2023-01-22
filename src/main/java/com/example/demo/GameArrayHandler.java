@@ -14,7 +14,6 @@ public class GameArrayHandler { // GameArrayHandler provides easy access between
         @Override
         public void run() {
             array.update();
-            System.out.println(array);
         }
     };
 

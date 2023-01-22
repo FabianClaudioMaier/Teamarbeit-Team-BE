@@ -21,8 +21,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GameOfLife extends Application {
     private static final int WIDTH = 800;
@@ -40,9 +43,11 @@ public class GameOfLife extends Application {
     private static int timeStamp = 0;
 
     private static int simulationSpeed = 20;
-    private static List<Array> SAVED = new ArrayList<>();
+    private static List<File> SAVES = new ArrayList<>();
 
     private static GameArrayHandler gameArrayHandler = new GameArrayHandler(ARRAY);
+
+    private static int currentFileInArchive = 0;
 
 
     public static void main(String[] args) {
@@ -130,8 +135,42 @@ public class GameOfLife extends Application {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("pressed go to Archive");
-                ARRAY = SAVED.get(0);
+                File[] filesInArchive = new File("src/main/Archive/").listFiles();
+                currentFileInArchive = 0;
+                ARRAY = ArchiveDAL.load(filesInArchive[currentFileInArchive]);
                 updateCellApparell();
+            }
+        });
+
+        Button Next = new Button("Next");
+        Next.setLayoutX(WIDTH + 10);
+        Next.setLayoutY(300);
+
+        Next.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                File[] filesInArchive = new File("src/main/Archive/").listFiles();
+                if(currentFileInArchive + 1 < filesInArchive.length) {
+                    currentFileInArchive++;
+                    ARRAY = ArchiveDAL.load(filesInArchive[currentFileInArchive]);
+                    updateCellApparell();
+                }
+            }
+        });
+
+        Button Previous = new Button("Previous");
+        Previous.setLayoutX(WIDTH + 10);
+        Previous.setLayoutY(350);
+
+        Previous.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                File[] filesInArchive = new File("src/main/Archive/").listFiles();
+                if(currentFileInArchive - 1 >= 0) {
+                    currentFileInArchive--;
+                    ARRAY = ArchiveDAL.load(filesInArchive[currentFileInArchive]);
+                    updateCellApparell();
+                }
             }
         });
 
@@ -142,6 +181,8 @@ public class GameOfLife extends Application {
         ROOT.getChildren().add(Edit);
         ROOT.getChildren().add(Save);
         ROOT.getChildren().add(GoToArchive);
+        ROOT.getChildren().add(Next);
+        ROOT.getChildren().add(Previous);
 
         primaryStage.setScene(SCENE);
         primaryStage.show();
@@ -213,5 +254,13 @@ public class GameOfLife extends Application {
                 ROOT.getChildren().add(cell);
             }
         }
+    }
+
+    //Listing the Files is Archive, source: https://www.baeldung.com/java-list-directory-files
+    public Set<String> listFilesUsingJavaIO(String dir) {
+        return Stream.of(new File(dir).listFiles())
+                .filter(file -> !file.isDirectory())
+                .map(File::getName)
+                .collect(Collectors.toSet());
     }
 }
