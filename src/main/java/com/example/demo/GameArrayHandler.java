@@ -1,13 +1,11 @@
 package com.example.demo;
 
 import com.example.demo.Models.Array;
-import com.example.demo.Models.Coordinates;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ArrayGameHandler {
+public class GameArrayHandler { // GameArrayHandler provides easy access between frontend and the game array
     private final Array array;
     private boolean gameStatePlay = false;
     private Timer timer;
@@ -20,11 +18,11 @@ public class ArrayGameHandler {
         }
     };
 
-    public ArrayGameHandler(Array array) {
+    public GameArrayHandler(Array array) {
         this.array = array;
     }
 
-    public void playPause() {
+    public void playPause() { // Provides functionality for the play/pause button in the frontend
         if (gameStatePlay) {
             timer.cancel();
             timer = null;
@@ -35,17 +33,11 @@ public class ArrayGameHandler {
         gameStatePlay = !gameStatePlay;
     }
 
-    public void nextStep() {
+    public void nextStep() { // Provides functionality for the next step button in the frontend
         array.update();
     }
 
     public void changeCellStatus(int row, int col) {
-        array.setArray(row, col);
-    }
-
-    public void changeHoverCellsStatus(List<Coordinates> listOfCoordinates) {
-        for (Coordinates coordinate : listOfCoordinates) {
-            changeCellStatus(coordinate.getxCoordinate(), coordinate.getyCoordinate());
-        }
+        array.changeCellStatus(row, col);
     }
 }
