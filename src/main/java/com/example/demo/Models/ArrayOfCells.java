@@ -1,4 +1,4 @@
-package ac.at.fhcampuswien.Models;
+package com.example.demo.Models;
 
 public class ArrayOfCells {
     private int[][] Array; //1 = LIFE, 0 = DEAD

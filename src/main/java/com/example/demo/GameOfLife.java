@@ -1,6 +1,7 @@
-package ac.at.fhcampuswien;
+package com.example.demo;
 
-import ac.at.fhcampuswien.Models.ArrayOfCells;
+import com.example.demo.Models.*;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

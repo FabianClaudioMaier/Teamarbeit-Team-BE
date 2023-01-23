@@ -1,6 +1,6 @@
-package ac.at.fhcampuswien;
+package com.example.demo;
 
-import ac.at.fhcampuswien.Models.ArrayOfCells;
+import com.example.demo.Models.ArrayOfCells;
 
 import java.io.*;
 import java.time.format.DateTimeFormatter;

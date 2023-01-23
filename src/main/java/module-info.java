@@ -4,8 +4,8 @@ module com.example.demo {
     requires java.desktop;
 
 
-    opens ac.at.fhcampuswien to javafx.fxml;
-    exports ac.at.fhcampuswien;
-    exports ac.at.fhcampuswien.Models;
-    opens ac.at.fhcampuswien.Models to javafx.fxml;
+    opens com.example.demo to javafx.fxml;
+    exports com.example.demo;
+    exports com.example.demo.Models;
+    opens com.example.demo.Models to javafx.fxml;
 }
