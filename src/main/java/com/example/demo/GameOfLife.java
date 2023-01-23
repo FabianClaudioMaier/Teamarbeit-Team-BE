@@ -5,6 +5,7 @@ import com.example.demo.Models.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
@@ -40,7 +41,7 @@ public class GameOfLife extends Application {
     private static int simulationSpeed = 20; //controls the simulation speed
     private static GameArrayHandler gameArrayHandler = new GameArrayHandler(backgroundCellArray); //Connection to the ArrayOfCells
     private static int currentFileInArchive = 0; //Controls which Array is being displayed
-
+    private int clickedCellState = 0;
 
     public static void main(String[] args) {
         backgroundCellArray.create(0.5); //seed for the CellArray
@@ -224,7 +225,6 @@ public class GameOfLife extends Application {
         //Display the Show
         primaryStage.show();
 
-
         //source: https://stackoverflow.com/questions/12153622/how-to-close-a-javafx-application-on-window-close
         //Close the window
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -236,19 +236,40 @@ public class GameOfLife extends Application {
         });
 
 
-        SimulationScreenScene.setOnMouseClicked(event -> {
+        SimulationScreenScene.setOnMouseClicked(event -> { // Event which changes the first state and appearance of the cell after it gets clicked
             //When in Editing mode, clicking cells changes their state.
             if(gameStateIsEditing) {
-                int row = (int) (event.getY() / cellSize);
-                int col = (int) (event.getX() / cellSize);
-                gameArrayHandler.changeCellStatus(row,col);
-                ((Rectangle) SimulationScreenGroup.getChildren().get(row * columns + col)).setFill(backgroundCellArray.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                try {
+                    int row = (int) (event.getY() / cellSize);
+                    int col = (int) (event.getX() / cellSize);
+                    gameArrayHandler.changeCellStatus(row,col);
+                    ((Rectangle) SimulationScreenGroup.getChildren().get(row * columns + col)).setFill(backgroundCellArray.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                    clickedCellState = backgroundCellArray.getArray()[row][col];
+                } catch (Exception e) {
+                    System.out.println("Please click a cell within the cell area!");
+                }
             } else {
-                System.out.println("please Stop the Game to change states");
+                System.out.println("Please enter the edit mode before editing!");
             }
         });
 
+        SimulationScreenScene.setOnMouseDragged(event -> { // Event which changes state and appearance of all cells getting dragged over, based on state of first clicked cell
+            if (gameStateIsEditing) {
+                try {
+                    int row = (int) (event.getY() / cellSize);
+                    int col = (int) (event.getX() / cellSize);
+                    gameArrayHandler.setCellStatus(row, col, clickedCellState);
+                    ((Rectangle) SimulationScreenGroup.getChildren().get(row * columns + col)).setFill(backgroundCellArray.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                } catch (Exception e) {
+                    System.out.println("Please drag over cells within the cell area!");
+                }
+            } else {
+                System.out.println("Please enter the edit mode before editing!");
+            }
+        });
 
+        SimulationScreenScene.setOnMouseDragReleased(event -> { //Event that does nothing to prevent that the last cell getting dragged over gets changed twice
+        });
 
         new AnimationTimer() {
             //Updates cells and display when state is set to running
