@@ -49,9 +49,9 @@ public final class ArchiveDAL { // Provides functionality of saving configuratio
                 rows.add(row);
             }
 
-            arrayOfCells = new ArrayOfCells(rows.size()-1, rows.get(1).length-1);
-            for (int i = 0; i <= arrayOfCells.getNumberOfRows(); i++) {
-                for (int j = 0; j <= arrayOfCells.getNumberOfColoums(); j++) {
+            arrayOfCells = new ArrayOfCells(rows.size(), rows.get(1).length);
+            for (int i = 0; i < arrayOfCells.getNumberOfRows(); i++) {
+                for (int j = 0; j < arrayOfCells.getNumberOfColoums(); j++) {
                     arrayOfCells.setCellStatus(i, j, Integer.parseInt(rows.get(i)[j]));
                 }
             }

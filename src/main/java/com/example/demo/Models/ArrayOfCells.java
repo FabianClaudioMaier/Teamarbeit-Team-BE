@@ -5,14 +5,14 @@ public class ArrayOfCells {
     int numberOfColoums, numberOfRows;
 
     public ArrayOfCells(int numberOfRows, int numberOfColoums) {
-        Array = new int[numberOfRows+1][numberOfColoums+1]; //All Cells initialized with 0
+        Array = new int[numberOfRows][numberOfColoums]; //All Cells initialized with 0
         this.numberOfColoums = numberOfColoums;
         this.numberOfRows = numberOfRows;
     }
 
     public void create(double seed){    //Some Cells become Alife on a random Basis
-        for (int y = 0; y <= numberOfRows; y++) {
-            for (int x = 0; x <= numberOfColoums; x++) {
+        for (int y = 0; y < numberOfRows; y++) {
+            for (int x = 0; x < numberOfColoums; x++) {
                 if(Math.random() < seed){
                     Array[y][x] = 1;
                 }
@@ -22,9 +22,14 @@ public class ArrayOfCells {
 
     public void update() {
         //Update the Cells according to the rules of the Game
-        int[][] copiedArray = Array;
-        for (int row = 0; row <= numberOfRows; row++) {
-            for (int col = 0; col <= numberOfColoums; col++) {
+        int[][] copiedArray = new int[numberOfRows][numberOfColoums];
+
+        for (int row = 0; row < numberOfRows; row++) {
+            System.arraycopy(Array[row], 0, copiedArray[row], 0, numberOfColoums);
+        }
+
+        for (int row = 0; row < numberOfRows; row++) {
+            for (int col = 0; col < numberOfColoums; col++) {
 
                 int sum = getSum(col,row,copiedArray);
 
@@ -55,22 +60,22 @@ public class ArrayOfCells {
         if(x-1 >= 0){
             sumOfAllNeighbours += copiedArray[y][x-1];
         }
-        if(x-1 >= 0 && y+1 <= numberOfRows){
+        if(x-1 >= 0 && y+1 < numberOfRows){
             sumOfAllNeighbours += copiedArray[y+1][x-1];
         }
         if(y-1 >= 0){
             sumOfAllNeighbours += copiedArray[y-1][x];
         }
-        if(y+1 <= numberOfRows){
+        if(y+1 < numberOfRows){
             sumOfAllNeighbours += copiedArray[y+1][x];
         }
-        if(x+1 <= numberOfColoums && y-1 >= 0){
+        if(x+1 < numberOfColoums && y-1 >= 0){
             sumOfAllNeighbours += copiedArray[y-1][x+1];
         }
-        if(x+1 <= numberOfColoums){
+        if(x+1 < numberOfColoums){
             sumOfAllNeighbours += copiedArray[y][x+1];
         }
-        if(x+1 <= numberOfColoums && y+1 <= numberOfRows){
+        if(x+1 < numberOfColoums && y+1 < numberOfRows){
             sumOfAllNeighbours += copiedArray[y+1][x+1];
         }
         return sumOfAllNeighbours;
