@@ -39,6 +39,10 @@ public class GameArrayHandler { // GameArrayHandler provides easy access between
     public void changeCellStatus(int row, int col) {
         arrayOfCells.changeCellStatus(row, col);
     }
+    
+    public void setCellStatus(int row, int col, int value) {
+        arrayOfCells.setCellStatus(row, col, value);
+    }
 
     public void clearArray() {
         for (int i = 0; i < arrayOfCells.getNumberOfRows(); i++) {
