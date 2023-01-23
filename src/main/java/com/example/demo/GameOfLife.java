@@ -236,7 +236,7 @@ public class GameOfLife extends Application {
         });
 
 
-        SimulationScreenScene.setOnMouseClicked(event -> { // Event which changes the first state and appearance of the cell after it gets clicked
+        SimulationScreenScene.setOnMousePressed(event -> { // Event which changes the first state and appearance of the cell after it gets clicked
             //When in Editing mode, clicking cells changes their state.
             if(gameStateIsEditing) {
                 try {
