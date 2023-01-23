@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.Models.Array;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
@@ -39,6 +40,7 @@ public class GameOfLife extends Application {
 
     private static GameArrayHandler gameArrayHandler = new GameArrayHandler(ARRAY);
 
+    private int clickedCellState = 0;
 
     public static void main(String[] args) {
         ARRAY.create(0.5);
@@ -140,15 +142,39 @@ public class GameOfLife extends Application {
         primaryStage.setScene(SCENE);
         primaryStage.show();
 
-        SCENE.setOnMouseClicked(event -> {
+
+        SCENE.setOnMousePressed(event -> { //Event which changes the first state and appearance of the cell after it gets clicked
             if (EDITING) {
-                int row = (int) (event.getY() / CELL_SIZE);
-                int col = (int) (event.getX() / CELL_SIZE);
-                ARRAY.changeCellStatus(row, col);
-                ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                try {
+                    int row = (int) (event.getY() / CELL_SIZE);
+                    int col = (int) (event.getX() / CELL_SIZE);
+                    ARRAY.changeCellStatus(row, col);
+                    ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                    clickedCellState = ARRAY.getArray()[row][col];
+                } catch (Exception e) {
+                    System.out.println("Please click a cell within the cell area!");
+                }
             } else {
-                System.out.println("please Stop the Game to change states");
+                System.out.println("Please enter the edit mode before editing!");
             }
+        });
+
+        SCENE.setOnMouseDragged(event -> { //Event which changes state and appearance of all cells getting dragged over, based on state of first clicked cell
+            if (EDITING) {
+                try {
+                    int row = (int) (event.getY() / CELL_SIZE);
+                    int col = (int) (event.getX() / CELL_SIZE);
+                    ARRAY.setCellStatus(row, col, clickedCellState);
+                    ((Rectangle) ROOT.getChildren().get(row * COLUMNS + col)).setFill(ARRAY.getArray()[row][col] == 1 ? Color.BLACK : Color.WHITE);
+                } catch (Exception e) {
+                    System.out.println("Please drag over cells within the cell area!");
+                }
+            } else {
+                System.out.println("Please enter the edit mode before editing!");
+            }
+        });
+
+        SCENE.setOnMouseDragReleased(event -> { //Event that does nothing to prevent that the last cell getting dragged over gets changed twice
         });
 
         new AnimationTimer() {
