@@ -1,24 +1,24 @@
-package com.example.demo;
+package ac.at.fhcampuswien;
 
-import com.example.demo.Models.Array;
+import ac.at.fhcampuswien.Models.ArrayOfCells;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameArrayHandler { // GameArrayHandler provides easy access between frontend and the game array
-    private final Array array;
+    private final ArrayOfCells arrayOfCells;
     private boolean gameStatePlay = false;
     private Timer timer;
 
     private final TimerTask ttUpdateArray = new TimerTask() {
         @Override
         public void run() {
-            array.update();
+            arrayOfCells.update();
         }
     };
 
-    public GameArrayHandler(Array array) {
-        this.array = array;
+    public GameArrayHandler(ArrayOfCells arrayOfCells) {
+        this.arrayOfCells = arrayOfCells;
     }
 
     public void playPause() { // Provides functionality for the play/pause button in the frontend
@@ -33,10 +33,18 @@ public class GameArrayHandler { // GameArrayHandler provides easy access between
     }
 
     public void nextStep() { // Provides functionality for the next step button in the frontend
-        array.update();
+        arrayOfCells.update();
     }
 
     public void changeCellStatus(int row, int col) {
-        array.changeCellStatus(row, col);
+        arrayOfCells.changeCellStatus(row, col);
+    }
+
+    public void clearArray() {
+        for (int i = 0; i < arrayOfCells.getNumberOfRows(); i++) {
+            for (int j = 0; j < arrayOfCells.getNumberOfColoums(); j++) {
+                arrayOfCells.setCellStatus(i,j,0);
+            }
+        }
     }
 }

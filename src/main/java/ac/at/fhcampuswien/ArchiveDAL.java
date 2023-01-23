@@ -1,6 +1,6 @@
-package com.example.demo;
+package ac.at.fhcampuswien;
 
-import com.example.demo.Models.Array;
+import ac.at.fhcampuswien.Models.ArrayOfCells;
 
 import java.io.*;
 import java.time.format.DateTimeFormatter;
@@ -12,16 +12,16 @@ import javax.swing.JOptionPane;
 public final class ArchiveDAL { // Provides functionality of saving configurations to CSV files
     private final static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 
-    public static void save(Array array) { // Saves the current config as a CSV file within the Archive directory
+    public static void save(ArrayOfCells arrayOfCells) { // Saves the current config as a CSV file within the Archive directory
         LocalDateTime now = LocalDateTime.now();
         File arrayCSV = new File("src/main/Archive/" + dtf.format(now) + ".csv");
 
         List<String> dataLines = new ArrayList<>();
-        for (int i = 0; i < array.getNumberOfRows(); i++) {
+        for (int i = 0; i < arrayOfCells.getNumberOfRows(); i++) {
             StringBuilder dataLine = new StringBuilder();
-            for (int j = 0; j < array.getNumberOfColoums(); j++) {
-                dataLine.append(array.getArray()[i][j]);
-                if (j < array.getNumberOfColoums() - 1) dataLine.append(",");
+            for (int j = 0; j < arrayOfCells.getNumberOfColoums(); j++) {
+                dataLine.append(arrayOfCells.getArray()[i][j]);
+                if (j < arrayOfCells.getNumberOfColoums() - 1) dataLine.append(",");
             }
             dataLines.add(dataLine.toString());
         }
@@ -38,8 +38,8 @@ public final class ArchiveDAL { // Provides functionality of saving configuratio
         }
     }
 
-    public static Array load(File fileToLoad) { // loads the passed file (passed from Archive view) into a new array and returns that, if an error occurs, null gets returned
-        Array array;
+    public static ArrayOfCells load(File fileToLoad) { // loads the passed file (passed from Archive view) into a new array and returns that, if an error occurs, null gets returned
+        ArrayOfCells arrayOfCells;
         List<String[]> rows = new ArrayList<>();
         String dataRow;
         try {
@@ -49,10 +49,10 @@ public final class ArchiveDAL { // Provides functionality of saving configuratio
                 rows.add(row);
             }
 
-            array = new Array(rows.size()-1, rows.get(1).length-1);
-            for (int i = 0; i <= array.getNumberOfRows(); i++) {
-                for (int j = 0; j <= array.getNumberOfColoums(); j++) {
-                    array.setCellStatus(i, j, Integer.parseInt(rows.get(i)[j]));
+            arrayOfCells = new ArrayOfCells(rows.size()-1, rows.get(1).length-1);
+            for (int i = 0; i <= arrayOfCells.getNumberOfRows(); i++) {
+                for (int j = 0; j <= arrayOfCells.getNumberOfColoums(); j++) {
+                    arrayOfCells.setCellStatus(i, j, Integer.parseInt(rows.get(i)[j]));
                 }
             }
 
@@ -60,7 +60,7 @@ public final class ArchiveDAL { // Provides functionality of saving configuratio
             errorHandling(e, "Beim Laden der Konfiguration ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.", "Fehler beim Ladeversuch");
             return null;
         }
-        return array;
+        return arrayOfCells;
     }
 
     private static void errorHandling(Exception e, String message, String title) { // Method to print error details to the console and inform the user via a message box
