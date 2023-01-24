@@ -2,9 +2,6 @@ package com.example.demo;
 
 import com.example.demo.Models.ArrayOfCells;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class GameArrayHandler { // GameArrayHandler provides easy access between frontend and the game array
     private final ArrayOfCells arrayOfCells;
 
