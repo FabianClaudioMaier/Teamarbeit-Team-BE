@@ -81,19 +81,6 @@ public class ArrayOfCells {
         return sumOfAllNeighbours;
     }
 
-    @Override
-    public String toString(){
-        String output = "";
-        for (int [] row: Array) {
-            for (int value: row) {
-                output += " " + value + " ";
-            }
-            output += "\n";
-        }
-        output += "\n";
-        return output;
-    }
-
     public int[][] getArray(){
         return Array;
     }
