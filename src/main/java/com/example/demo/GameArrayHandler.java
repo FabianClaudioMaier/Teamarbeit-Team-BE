@@ -3,7 +3,7 @@ package com.example.demo;
 import com.example.demo.Models.ArrayOfCells;
 
 public class GameArrayHandler { // GameArrayHandler provides easy access between frontend and the game array
-    private final ArrayOfCells arrayOfCells;
+    private ArrayOfCells arrayOfCells;
 
     public GameArrayHandler(ArrayOfCells arrayOfCells) {
         this.arrayOfCells = arrayOfCells;
@@ -27,5 +27,9 @@ public class GameArrayHandler { // GameArrayHandler provides easy access between
                 arrayOfCells.setCellStatus(i,j,0);
             }
         }
+    }
+
+    public void updateArray(ArrayOfCells arrayOfCells){
+        this.arrayOfCells = arrayOfCells;
     }
 }

@@ -136,6 +136,7 @@ public class GameOfLife extends Application {
                 File[] filesInArchive = new File("src/main/Archive/").listFiles();
                 currentFileInArchive = 0;
                 backgroundCellArray = ArchiveDAL.load(filesInArchive[currentFileInArchive]);
+                gameArrayHandler.updateArray(backgroundCellArray);
                 updateCellApparell(currentGroup);
                 primaryStage.setScene(currentScene);
             }
@@ -168,6 +169,7 @@ public class GameOfLife extends Application {
                 if(currentFileInArchive + 1 < filesInArchive.length) {
                     currentFileInArchive++;
                     backgroundCellArray = ArchiveDAL.load(filesInArchive[currentFileInArchive]);
+                    gameArrayHandler.updateArray(backgroundCellArray);
                     updateCellApparell(currentGroup);
                 }
             }
@@ -185,6 +187,7 @@ public class GameOfLife extends Application {
                 if(currentFileInArchive - 1 >= 0) {
                     currentFileInArchive--;
                     backgroundCellArray = ArchiveDAL.load(filesInArchive[currentFileInArchive]);
+                    gameArrayHandler.updateArray(backgroundCellArray);
                     updateCellApparell(currentGroup);
                 }
             }
