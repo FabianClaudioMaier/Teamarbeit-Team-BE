@@ -296,11 +296,8 @@ public class GameOfLife extends Application {
             if (event.getCode() == KeyCode.S) {
                 Save.fire();
             }
-            if (event.getCode() == KeyCode.N) {
-                nextStep.fire();
-            }
             if (event.getCode() == KeyCode.SPACE) {
-                StartStop.fire();
+                nextStep.fire();
             }
             event.consume();
         });
