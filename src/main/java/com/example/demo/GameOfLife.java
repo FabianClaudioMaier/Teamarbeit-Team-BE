@@ -80,7 +80,6 @@ public class GameOfLife extends Application {
                     else StartStop.setText("Stop");
 
                     gameStateIsRunning = !gameStateIsRunning;
-                    gameArrayHandler.playPause();
                 } else System.out.println("Exit Editing Mode");
             }
         });
@@ -94,7 +93,6 @@ public class GameOfLife extends Application {
             @Override
             public void handle(ActionEvent event) {
                 if (!gameStateIsEditing) {
-                    if(gameStateIsRunning) gameArrayHandler.playPause();
                     gameStateIsRunning = false;
                     StartStop.setText("Start");
                     Edit.setText("Stop Editing");
