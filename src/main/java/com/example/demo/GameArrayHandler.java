@@ -7,7 +7,6 @@ import java.util.TimerTask;
 
 public class GameArrayHandler { // GameArrayHandler provides easy access between frontend and the game array
     private final ArrayOfCells arrayOfCells;
-    private boolean gameStatePlay = false;
 
     public GameArrayHandler(ArrayOfCells arrayOfCells) {
         this.arrayOfCells = arrayOfCells;
